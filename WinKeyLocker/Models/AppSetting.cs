@@ -12,6 +12,6 @@
 
         public bool LockMiddleMouse { get; set; } = false;
 
-
+        public bool AutoStartUp { get; set; } = false;
     }
 }

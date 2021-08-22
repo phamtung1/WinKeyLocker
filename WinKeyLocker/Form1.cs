@@ -27,6 +27,7 @@ namespace WinKeyLocker
         {
             this.Icon = Properties.Resources.keyboard;
             notifyIcon1.Icon = Properties.Resources.keyboard;
+            notifyIcon1.Text = Application.ProductName;
             picIcon.Image = Properties.Resources.keyboard.ToBitmap();
 
             notifyIcon1.Visible = true;
@@ -35,6 +36,7 @@ namespace WinKeyLocker
 
             _appSetting = AppSettingHelper.Load<AppSetting>();
 
+            chkAutoStartup.Checked = _appSetting.AutoStartUp;
             txtPassword.Text = _appSetting.UnlockPassword;
             chkHideOnStartup.Checked = _appSetting.HideOnStartup;
             chkLockLeftMouse.Checked = _appSetting.LockLeftMouse;
@@ -93,18 +95,6 @@ namespace WinKeyLocker
             StopLock();
         }
 
-        private void btnLock_Click(object sender, EventArgs e)
-        {
-            if (_lockService.IsLocking)
-            {
-                StopLock();
-            }
-            else
-            {
-                StartLock();
-            }
-        }
-
         private void StartLock()
         {
             if (_appSetting.LockLeftMouse || _appSetting.LockRightMouse || _appSetting.LockMiddleMouse)
@@ -116,7 +106,6 @@ namespace WinKeyLocker
             _lockService.LockKeyboard();
             picIcon.Image = Properties.Resources.keyboard_locked.ToBitmap();
             notifyIcon1.Icon = Properties.Resources.keyboard_locked;
-            btnLock.Text = "Unlock";
             notifyIcon1.ShowBalloonTip(1000, string.Empty, "Keyboard & mouse are locked. Type '" + _appSetting.UnlockPassword + "' to unlock.", ToolTipIcon.Info);
         }
 
@@ -130,7 +119,6 @@ namespace WinKeyLocker
             _lockService.UnlockKeyboard();
             notifyIcon1.Icon = Properties.Resources.keyboard;
             picIcon.Image = Properties.Resources.keyboard.ToBitmap();
-            btnLock.Text = "Lock";
             notifyIcon1.ShowBalloonTip(1000, string.Empty, "Keyboard & mouse are unlocked", ToolTipIcon.Info);
         }
 
@@ -168,6 +156,10 @@ namespace WinKeyLocker
                 return;
             }
 
+            _appSetting.AutoStartUp = chkAutoStartup.Checked;
+
+            StartupHelper.SetAutoStartup(_appSetting.AutoStartUp);
+            
             _appSetting.HideOnStartup = chkHideOnStartup.Checked;
             _appSetting.UnlockPassword = password;
             _appSetting.LockLeftMouse = chkLockLeftMouse.Checked;

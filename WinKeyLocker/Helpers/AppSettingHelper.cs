@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
+using System.Windows.Forms;
 
 namespace WinKeyLocker.Helpers
 {
@@ -9,14 +10,20 @@ namespace WinKeyLocker.Helpers
 
         public static void Save<T>(T pSettings, string fileName = DEFAULT_FILENAME)
         {
-            File.WriteAllText(fileName, JsonConvert.SerializeObject(pSettings));
+            string apppath = Path.GetDirectoryName(Application.ExecutablePath);
+
+            var fullPath = Path.Combine(apppath, fileName);
+            File.WriteAllText(fullPath, JsonConvert.SerializeObject(pSettings));
         }
 
-        public static T Load<T>(string fileName = DEFAULT_FILENAME) where T: new()
+        public static T Load<T>(string fileName = DEFAULT_FILENAME) where T : new()
         {
+            string apppath = Path.GetDirectoryName(Application.ExecutablePath);
+
+            var fullPath = Path.Combine(apppath, fileName);
             T t = new T();
-            if (File.Exists(fileName))
-                t = JsonConvert.DeserializeObject<T>(File.ReadAllText(fileName));
+            if (File.Exists(fullPath))
+                t = JsonConvert.DeserializeObject<T>(File.ReadAllText(fullPath));
             return t;
         }
     }
