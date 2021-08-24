@@ -62,7 +62,6 @@ namespace WinKeyLocker
                 lblHotkey.Font = new System.Drawing.Font(lblHotkey.Font, System.Drawing.FontStyle.Strikeout);
             }
 
-
             if (_appSetting.HideOnStartup)
             {
                 this.Hide();
