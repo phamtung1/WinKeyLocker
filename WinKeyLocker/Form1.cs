@@ -190,7 +190,7 @@ namespace WinKeyLocker
 
             if (regexItem.IsMatch(password))
             {
-                return password;
+                return password.ToLowerInvariant();
             }
 
             return string.Empty;
